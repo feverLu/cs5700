@@ -5,6 +5,14 @@ set ns [new Simulator]
 set variant [lindex $argv 0]
 # Queue discipline
 set queue_method [lindex $argv 1]
+# TCP start time
+set tcp_start_time [lindex $arg 2]
+# TCP end time
+set tcp_end_time [lindex $arg 3]
+# CBR start time
+set cbr_start_time [lindex $arg 4]
+# CBR end time
+set cbr_end_time [lindex $arg 5]
 
 # Open the trace file (before starting the experiment)
 set tf [open my_experimental3_output_${variant}_${queue_method}.tr w]
@@ -68,10 +76,10 @@ set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 
 # Schedule events for the CBR and TCP agents
-$ns at 0.0 "$ftp start"
-$ns at 1.0 "$cbr start"
-$ns at 10.0 "$cbr stop"
-$ns at 10.0 "$ftp stop"
+$ns at tcp_start_time "$ftp start"
+$ns at cbr_start_time "$cbr start"
+$ns at tcp_end_time "$cbr stop"
+$ns at cbr_end_time "$ftp stop"
 
 $ns at 10.0 "finish"
 
